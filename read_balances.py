@@ -6,13 +6,19 @@ from iota import Address
 api = Iota("https://nodes.devnet.iota.org:443", testnet = True)
 
 # Read out address to use from file
-address = []
+addresses = []
 with open(os.path.join(sys.path[0], "addresses_testnet"), "r") as f:
-    address.append(f.read())
+    for line in f.readlines():
+        addresses.append(line.strip())
+
+print(addresses)
 
 def getbalance():
     print("Checking balance")
-    return api.get_balances(address)["balances"]
+    return api.get_balances(addresses)["balances"]
     
 balance = getbalance()
 print(balance)
+
+spent = api.were_addresses_spent_from(addresses)
+print(spent)
